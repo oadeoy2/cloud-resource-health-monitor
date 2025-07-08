@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-east-1'
-        BACKEND_REPO = '47851749577.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-backend'
-        FRONTEND_REPO = '47851749577.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-frontend'
+        BACKEND_REPO = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-backend'
+        FRONTEND_REPO = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-frontend'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
