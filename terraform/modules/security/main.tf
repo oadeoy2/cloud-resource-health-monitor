@@ -21,15 +21,3 @@ resource "aws_security_group" "ecs_service_sg" {
   tags = var.tags
 }
 
-# variables.tf
-variable "vpc_id" {}
-variable "project_name" {}
-variable "environment" {}
-variable "tags" {
-  type = map(string)
-}
-
-# outputs.tf
-output "ecs_service_sg_id" {
-  value = aws_security_group.ecs_service_sg.id
-}

@@ -23,3 +23,4 @@ variable "tags" {
     Project   = "Cloud Resource Health Monitor"
   }
 }
+

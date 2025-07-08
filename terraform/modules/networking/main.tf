@@ -44,18 +44,3 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# variables.tf
-variable "project_name" {}
-variable "environment" {}
-variable "tags" {
-  type = map(string)
-}
-
-# outputs.tf
-output "vpc_id" {
-  value = aws_vpc.main.id
-}
-
-output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
-}
