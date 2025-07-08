@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-east-1'
-        BACKEND_REPO = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-backend'
-        FRONTEND_REPO = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-frontend'
+        BACKEND_REPO = '47851749577.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-backend'
+        FRONTEND_REPO = '47851749577.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-frontend'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -15,7 +15,9 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/oadeoy2/cloud-resource-health-monitor.git'
+                withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'GIT_TOKEN', usernameVariable: 'GIT_USER')]) {
+                    sh 'git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/oadeoy2/cloud-resource-health-monitor.git source'
+                }
             }
         }
 
@@ -32,7 +34,7 @@ pipeline {
 
         stage('Build & Push Backend Image') {
             steps {
-                dir('backend') {
+                dir('source/backend') {
                     sh '''
                       docker build -t backend:$IMAGE_TAG .
                       docker tag backend:$IMAGE_TAG $BACKEND_REPO:$IMAGE_TAG
@@ -44,7 +46,7 @@ pipeline {
 
         stage('Build & Push Frontend Image') {
             steps {
-                dir('frontend') {
+                dir('source/frontend') {
                     sh '''
                       docker build -t frontend:$IMAGE_TAG .
                       docker tag frontend:$IMAGE_TAG $FRONTEND_REPO:$IMAGE_TAG
