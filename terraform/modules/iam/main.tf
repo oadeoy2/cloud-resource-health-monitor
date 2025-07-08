@@ -58,3 +58,27 @@ resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.project_name}-${var.environment}-ec2-profile"
   role = aws_iam_role.ec2_role.name
 }
+
+resource "aws_iam_policy" "ecs_deploy_policy" {
+  name        = "${var.project_name}-${var.environment}-ecs-deploy-policy"
+  description = "Allow Jenkins EC2 instance to update ECS service"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecs:UpdateService",
+          "ecs:DescribeServices",
+          "ecs:DescribeClusters"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_deploy_attach" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.ecs_deploy_policy.arn
+}
