@@ -54,3 +54,24 @@ module "ecs_cluster" {
   ecs_task_exec_role_arn = module.iam.ecs_task_exec_role_arn
   cluster_id = module.ecs_cluster.cluster_id
 }
+
+module "ecs_instances" {
+  source                = "./modules/ecs_instances"
+  cluster_name          = module.ecs_cluster.cluster_id
+  key_name              = var.key_name
+  instance_profile_name = module.iam.instance_profile_name
+  security_group_id     = module.security.ecs_service_sg_id  # Make sure this returns a security group **ID**, not name
+  public_subnet_ids     = module.networking.public_subnet_ids
+}
+
+module "monitoring" {
+  source                   = "./modules/monitoring"
+  project_name             = var.project_name
+  environment              = var.environment
+  cluster_id               = module.ecs_cluster.cluster_id
+  prometheus_image_uri     = var.prometheus_image_uri
+  grafana_image_uri        = var.grafana_image_uri
+  ecs_task_exec_role_arn   = module.iam.ecs_task_exec_role_arn
+  tags                     = var.tags
+}
+

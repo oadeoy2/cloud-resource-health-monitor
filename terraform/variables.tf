@@ -24,3 +24,17 @@ variable "tags" {
   }
 }
 
+variable "key_name" {
+  description = "Name of the EC2 key pair to use for ECS instances"
+  type        = string
+}
+
+variable "prometheus_image_uri" {
+  description = "ECR image URI for Prometheus container"
+  type        = string
+}
+
+variable "grafana_image_uri" {
+  description = "ECR image URI for Grafana container"
+  type        = string
+}

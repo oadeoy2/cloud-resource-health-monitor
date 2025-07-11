@@ -77,3 +77,4 @@ resource "aws_ecs_service" "frontend_service" {
 
   depends_on = [aws_ecs_task_definition.frontend]
 }
+
