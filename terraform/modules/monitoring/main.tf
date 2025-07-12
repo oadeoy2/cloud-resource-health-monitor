@@ -41,7 +41,7 @@ resource "aws_ecs_task_definition" "grafana" {
     essential = true
     portMappings = [{
       containerPort = 3000
-      hostPort      = 3000
+      hostPort      = 0
       protocol      = "tcp"
     }]
   }])
