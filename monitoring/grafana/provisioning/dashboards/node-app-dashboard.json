@@ -1,0 +1,38 @@
+{
+  "id": null,
+  "uid": "nodeapp",
+  "title": "Node App Overview",
+  "tags": ["prometheus"],
+  "timezone": "browser",
+  "schemaVersion": 30,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "CPU Usage",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])",
+          "legendFormat": "{{cpu}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "Memory Usage",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "legendFormat": "Used Memory",
+          "refId": "B"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
+    }
+  ]
+}
