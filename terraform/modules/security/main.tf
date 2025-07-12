@@ -1,8 +1,15 @@
-# main.tf
 resource "aws_security_group" "ecs_service_sg" {
   name        = "${var.project_name}-${var.environment}-ecs-sg"
   description = "Allow inbound from ALB, outbound to internet"
   vpc_id      = var.vpc_id
+
+  # Allow HTTP access to ALB (for Internet-facing traffic)
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 8080
@@ -34,4 +41,3 @@ resource "aws_security_group" "ecs_service_sg" {
 
   tags = var.tags
 }
-
