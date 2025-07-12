@@ -42,6 +42,7 @@ resource "aws_ecs_task_definition" "grafana" {
     portMappings = [{
       containerPort = 3000
       hostPort      = 3000
+      protocol      = "tcp"
     }]
   }])
 }
@@ -53,11 +54,11 @@ resource "aws_lb_target_group" "grafana" {
   vpc_id   = var.vpc_id
   target_type = "instance"
   health_check {
-    path                = "/"
+    path                = "/login"
     interval            = 30
-    timeout             = 5
+    timeout             = 10
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 4
     matcher             = "200-399"
   }
 }
@@ -73,7 +74,7 @@ resource "aws_lb_listener_rule" "grafana" {
 
   condition {
     path_pattern {
-      values = ["/grafana*"]
+      values = ["/grafana*", "/login"]
     }
   }
 }
