@@ -10,3 +10,8 @@ variable "tags" {
 
 variable "alb_listener_arn" {}
 variable "vpc_id" {}
+variable "listener_arn" {}
+
+variable "alb_name" {
+  type = string
+}

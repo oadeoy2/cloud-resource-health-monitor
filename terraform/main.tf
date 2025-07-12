@@ -73,7 +73,9 @@ module "monitoring" {
   grafana_image_uri        = var.grafana_image_uri
   ecs_task_exec_role_arn   = module.iam.ecs_task_exec_role_arn
   alb_listener_arn         = module.alb.listener_arn
+  listener_arn             = module.alb.listener_arn
   vpc_id                   = module.networking.vpc_id
+  alb_name                 = "crhm-dev-alb" 
   tags                     = var.tags
 }
 
