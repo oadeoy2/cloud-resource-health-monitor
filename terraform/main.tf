@@ -72,6 +72,17 @@ module "monitoring" {
   prometheus_image_uri     = var.prometheus_image_uri
   grafana_image_uri        = var.grafana_image_uri
   ecs_task_exec_role_arn   = module.iam.ecs_task_exec_role_arn
+  alb_listener_arn         = module.alb.listener_arn
+  vpc_id                   = module.networking.vpc_id
   tags                     = var.tags
 }
 
+module "alb" {
+  source            = "./modules/alb"
+  project_name      = var.project_name
+  environment       = var.environment
+  public_subnet_ids = module.networking.public_subnet_ids
+  alb_sg_id         = module.security.ecs_service_sg_id
+  alb_name          = "crhm-dev-alb"  # ensure this is <= 32 characters
+  tags              = var.tags
+}

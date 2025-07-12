@@ -7,3 +7,6 @@ variable "ecs_task_exec_role_arn" {}
 variable "tags" {
   type = map(string)
 }
+
+variable "alb_listener_arn" {}
+variable "vpc_id" {}

@@ -26,3 +26,11 @@ output "grafana_repo_url" {
 output "key_name" {
   value = var.key_name
 }
+
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}
+
+output "alb_listener_arn" {
+  value = module.alb.listener_arn
+}

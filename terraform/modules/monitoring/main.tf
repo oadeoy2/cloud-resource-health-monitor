@@ -55,3 +55,39 @@ resource "aws_ecs_service" "grafana_service" {
 
   depends_on = [aws_ecs_task_definition.grafana]
 }
+
+resource "aws_lb_target_group" "grafana_tg" {
+  name        = "grafana-tg"
+  port        = 3000
+  protocol    = "HTTP"
+  target_type = "instance"
+  vpc_id      = var.vpc_id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200-399"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = var.tags
+}
+
+resource "aws_lb_listener_rule" "grafana_rule" {
+  listener_arn = var.alb_listener_arn # e.g., 80 or 443
+  priority     = 30
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.grafana_tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/grafana*"]
+    }
+  }
+}

@@ -38,3 +38,9 @@ variable "grafana_image_uri" {
   description = "ECR image URI for Grafana container"
   type        = string
 }
+
+variable "alb_name" {
+  description = "Shortened name for the ALB (must be <=32 characters)"
+  type        = string
+  default     = "crhm-dev-alb"
+}
