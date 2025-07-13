@@ -88,3 +88,10 @@ module "alb" {
   alb_name          = "crhm-dev-alb"  # ensure this is <= 32 characters
   tags              = var.tags
 }
+
+module "iot" {
+  source       = "./modules/iot"
+  project_name = var.project_name
+  environment  = var.environment
+  tags         = var.tags
+}
