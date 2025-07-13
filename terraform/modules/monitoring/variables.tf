@@ -15,3 +15,5 @@ variable "listener_arn" {}
 variable "alb_name" {
   type = string
 }
+
+variable "node_exporter_image_uri" {}

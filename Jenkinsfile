@@ -7,6 +7,7 @@ pipeline {
         FRONTEND_REPO     = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-frontend'
         PROMETHEUS_REPO   = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-prometheus'
         GRAFANA_REPO      = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-grafana'
+        NODE_EXPORTER_REPO = '478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-node-exporter'
         IMAGE_TAG         = "${env.BUILD_NUMBER}"
     }
 
@@ -31,6 +32,7 @@ pipeline {
                         aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $FRONTEND_REPO
                         aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $PROMETHEUS_REPO
                         aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $GRAFANA_REPO
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $NODE_EXPORTER_REPO
                     '''
                 }
             }
@@ -84,6 +86,18 @@ pipeline {
             }
         }
 
+        stage('Build & Push Node Exporter Image') {
+            steps {
+                dir('source/monitoring/node-exporter') {
+                    sh '''
+                        docker build -t node-exporter:$IMAGE_TAG .
+                        docker tag node-exporter:$IMAGE_TAG $NODE_EXPORTER_REPO:latest
+                        docker push $NODE_EXPORTER_REPO:latest
+                    '''
+                }
+            }
+        }
+
         stage('Trigger ECS Redeploy') {
             steps {
                 sh '''
@@ -108,6 +122,12 @@ pipeline {
                     aws ecs update-service \
                         --cluster cloud-resource-health-monitor-dev-cluster \
                         --service grafana-service \
+                        --force-new-deployment \
+                        --region $AWS_REGION
+
+                    aws ecs update-service \
+                        --cluster cloud-resource-health-monitor-dev-cluster \
+                        --service node-exporter-service \
                         --force-new-deployment \
                         --region $AWS_REGION
                 '''

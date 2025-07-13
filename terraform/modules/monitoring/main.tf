@@ -98,3 +98,30 @@ resource "aws_ecs_service" "grafana_service" {
     aws_lb_listener_rule.grafana
   ]
 }
+
+resource "aws_ecs_task_definition" "node_exporter" {
+  family                   = "${var.project_name}-node-exporter"
+  network_mode             = "bridge"
+  requires_compatibilities = ["EC2"]
+  cpu                      = "128"
+  memory                   = "128"
+  execution_role_arn       = var.ecs_task_exec_role_arn
+
+  container_definitions = jsonencode([{
+    name      = "node-exporter"
+    image     = var.node_exporter_image_uri
+    essential = true
+    portMappings = [{
+      containerPort = 9100
+      hostPort      = 9100
+    }]
+  }])
+}
+
+resource "aws_ecs_service" "node_exporter_service" {
+  name            = "node-exporter-service"
+  cluster         = var.cluster_id
+  task_definition = aws_ecs_task_definition.node_exporter.arn
+  desired_count   = 1
+  launch_type     = "EC2"
+}

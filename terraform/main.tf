@@ -76,6 +76,7 @@ module "monitoring" {
   listener_arn             = module.alb.listener_arn
   vpc_id                   = module.networking.vpc_id
   alb_name                 = "crhm-dev-alb" 
+  node_exporter_image_uri  = "478517495773.dkr.ecr.us-east-1.amazonaws.com/cloud-resource-health-monitor-dev-node-exporter:latest"
   tags                     = var.tags
 }
 
@@ -104,3 +105,4 @@ module "monitoring_alerts" {
   alert_email   = "oadeoy2@gmail.com" # Replace with your actual email
   tags          = var.tags
 }
+
