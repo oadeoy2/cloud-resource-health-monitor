@@ -95,3 +95,12 @@ module "iot" {
   environment  = var.environment
   tags         = var.tags
 }
+
+module "monitoring_alerts" {
+  source        = "./modules/monitoring_alerts"
+  project_name  = var.project_name
+  environment   = var.environment
+  cluster_name  = module.ecs_cluster.ecs_cluster_name
+  alert_email   = "oadeoy2@gmail.com" # Replace with your actual email
+  tags          = var.tags
+}
